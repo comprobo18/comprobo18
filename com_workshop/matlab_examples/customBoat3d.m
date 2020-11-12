@@ -301,8 +301,8 @@ function customBoat3d()
                 % docker cp to sync the files to models directory and the
                 % gzweb directory
                 modelFolderPath = fullfile('GazeboStaging',modelName);
-                system(['/usr/local/bin/docker cp ',modelFolderPath,' boat:/root/.gazebo/models']);
-                system(['/usr/local/bin/docker cp ',modelFolderPath,' boat:/root/gzweb/http/client/assets']);
+                system(['/usr/local/bin/docker cp ',modelFolderPath,' neato:/root/.gazebo/models']);
+                system(['/usr/local/bin/docker cp ',modelFolderPath,' neato:/root/gzweb/http/client/assets']);
             else
                 % this is when we are running outside of Docker
                 mkdir(fullfile('~','.gazebo'));
