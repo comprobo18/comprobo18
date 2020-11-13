@@ -35,14 +35,9 @@ function polyline(doc, modelElem, name, componentDensityRatios, height, regions,
         [xcom, ycom, area, Ix, Iy, Ixy] = polyCOM(regions{r});
 
         zcom = Z(r) + height/2;
-        % if we have a boat, the componentDensityRatios is interpreted as a density
-        % to water ratio (assumed ot be 1000 kg/m^3).  If it isn't a boat, then we
-        % just assume that it is the mass itself
-        if ~isBoat
-            regionMass(end+1) = componentDensityRatios(r);
-        else
-            regionMass(end+1) = height*area*componentDensityRatios(r)*1000;
-        end
+        % the componentDensityRatios is interpreted as a density
+        % to water ratio (assumed ot be 1000 kg/m^3).
+        regionMass(end+1) = height*area*componentDensityRatios(r)*1000;
         mass = mass + regionMass(r);
         xcomOverall = xcomOverall + xcom*regionMass(r);
         ycomOverall = ycomOverall + ycom*regionMass(r);
@@ -108,7 +103,11 @@ function polyline(doc, modelElem, name, componentDensityRatios, height, regions,
         uriMaterial.setTextContent('file://media/materials/scripts/gazebo.material');
         nameMaterial = doc.createElement('name');
         scriptMaterial.appendChild(nameMaterial);
-        nameMaterial.setTextContent('Gazebo/WoodPallet')
+        if isBoat
+            nameMaterial.setTextContent('Gazebo/WoodPallet')
+        else
+            nameMaterial.setTextContent(materials{1});
+        end
         collision = doc.createElement('collision');
         collision.setAttribute('name', java.util.UUID.randomUUID.toString());
         polyline.appendChild(collision);
