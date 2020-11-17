@@ -1,4 +1,4 @@
-function connectWithContinuousJoint(doc, jointName, parentLinkName, childLinkName, x, y, z, offsetX, offsetY, offsetZ)
+function connectPivot(doc, jointName, jointType, parentLinkName, childLinkName, x, y, z, offsetX, offsetY, offsetZ)
     if nargin > 7
         masslessLink = doc.createElement('link');
         doc.getDocumentElement().appendChild(masslessLink);
@@ -10,7 +10,7 @@ function connectWithContinuousJoint(doc, jointName, parentLinkName, childLinkNam
     joint = doc.createElement('joint');
     doc.getDocumentElement().appendChild(joint);
     joint.setAttribute('name',jointName);
-    joint.setAttribute('type','continuous');
+    joint.setAttribute('type',jointType);
 
     parentLink = doc.createElement('parent');
     parentLink.setAttribute('link', parentLinkName);
