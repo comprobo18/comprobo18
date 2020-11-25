@@ -19,11 +19,11 @@ for i = 1 : 5
     sdfElem.appendChild(modelElem);
     modelElem.setAttribute('name',['poly',num2str(i)]);
 
-    xs = linspace(-1, 1, 50);
+    xs = linspace(-1, 1, 151);
     ys = abs(xs).^i;
     points = [xs' ys'; xs(1) ys(1)];
     Zs = [0 0.05];
-    stlFileName = makeLoftedMesh(xs', ys', NaN, Zs, [0 0], false);
+    stlFileName = makeLoftedMesh(points(:,1), points(:,2), NaN, Zs, [0 0], false);
     meshSTLURI = stageMesh(stlFileName)
     polyline(doc, modelElem, 'poly', 1, Zs(2)-Zs(1), points, materials{i}, false, Zs, meshSTLURI);
     spawnModel(['poly',num2str(i)],xmlwrite(sdfElem),2.5*(i-1)-5,0,1,0,0,0,true);

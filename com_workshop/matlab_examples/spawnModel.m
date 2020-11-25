@@ -12,11 +12,16 @@ if nargin < 10
 end
 msg = rosmessage(deleteSvc);
 msg.ModelName = modelName;
+if ismac
+    docker_bin = '/usr/local/bin/docker';
+elseif ispc || isunix
+    docker_bin = 'docker';
+end
 if ismac || ispc
     % In Docker on Mac this hangs until you delete the model from the gzweb GUI
     % Workaround based this issue
     % (https://answers.gazebosim.org/question/24982/delete_model-hangs-for-several-mins-after-repeated-additionsdeletions-of-a-sdf-model-which-sometimes-entirely-vanishes-from-the-scene-too-in-gazebo/)
-    system(['/usr/local/bin/docker exec neato gz model -m ',modelName,' -d']);
+    system([docker_bin,' exec neato gz model -m ',modelName,' -d']);
     % Not sure why, but this 'pause' seems necessary
     pause(3);
 else
