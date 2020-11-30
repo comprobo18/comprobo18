@@ -12,13 +12,13 @@ function meshBoatSTLURI = stageMesh(stlFileName)
         % we are running through docker.  Eventually we will use
         % docker cp to sync the files to models directory and the
         % gzweb directory
-        modelFolderPath = fullfile('GazeboStaging',modelName);
+        modelFolderPath = fullfile(tempdir, modelName);
         system([docker_bin,' cp ',modelFolderPath,' neato:/root/.gazebo/models']);
         system([docker_bin,' cp ',modelFolderPath,' neato:/root/gzweb/http/client/assets']);
     else
         % this is when we are running outside of Docker
         mkdir(fullfile('~','.gazebo'));
         mkdir(fullfile('~','.gazebo','models'));
-        copyfile(fullfile('./GazeboStaging',modelName),fullfile('~','.gazebo','models',modelName));
+        copyfile(fullfile(tempdir, modelName),fullfile('~','.gazebo','models',modelName));
     end
 end

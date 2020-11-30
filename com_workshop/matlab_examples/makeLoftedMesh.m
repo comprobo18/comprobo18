@@ -173,12 +173,10 @@ disp(['Num vertices ', num2str(size(verts,1))]);
 disp(['Num faces ', num2str(size(faces,1))]);
 
 TR = triangulation(faces, verts);
-stlwrite(TR, stl_file);
-mkdir('GazeboStaging');
 [filepath,name,ext] = fileparts(stl_file);
-modelDir = fullfile('GazeboStaging',name);
+modelDir = fullfile(tempdir, name);
 mkdir(modelDir);
 meshDir = fullfile(modelDir,'meshes');
 mkdir(meshDir);
-copyfile(stl_file, meshDir);
+stlwrite(TR, fullfile(meshDir, stl_file));
 end
