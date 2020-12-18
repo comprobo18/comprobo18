@@ -8,7 +8,7 @@ function meshBoatSTLURI = stageMesh(stlFileName)
     elseif ispc || isunix
         docker_bin = 'docker';
     end
-    if ismac || ispc || qeaSimStarted
+    if ismac || ispc || size(qeaSimStarted,1)
         % we are running through docker.  Eventually we will use
         % docker cp to sync the files to models directory and the
         % gzweb directory
