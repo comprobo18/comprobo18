@@ -1,4 +1,5 @@
 function spawnModel(modelName,xml,x,y,z,roll,pitch,yaw,useSDF,deleteSvc,spawnModelSvc)
+global qeaSimStarted;
 if nargin < 6
     roll = 0;
     pitch = 0;
@@ -7,17 +8,12 @@ end
 if nargin < 9
     useSDF = false;
 end
-if nargin < 10
-    deleteSvc = rossvcclient('/gazebo/delete_model');
-end
-msg = rosmessage(deleteSvc);
-msg.ModelName = modelName;
 if ismac
     docker_bin = '/usr/local/bin/docker';
 elseif ispc || isunix
     docker_bin = 'docker';
 end
-if ismac || ispc
+if ismac || ispc || size(qeaSimStarted,1)
     % In Docker on Mac this hangs until you delete the model from the gzweb GUI
     % Workaround based this issue
     % (https://answers.gazebosim.org/question/24982/delete_model-hangs-for-several-mins-after-repeated-additionsdeletions-of-a-sdf-model-which-sometimes-entirely-vanishes-from-the-scene-too-in-gazebo/)
@@ -25,10 +21,11 @@ if ismac || ispc
     % Not sure why, but this 'pause' seems necessary
     pause(3);
 else
-    call(deleteSvc, msg)
-    if nargin < 10
-        clear deleteSvc;
-    end
+    old_ld_library_path = getenv('LD_LIBRARY_PATH');
+    setenv('LD_LIBRARY_PATH', ['/usr/lib/x86_64-linux-gnu:',getenv('LD_LIBRARY_PATH')]);
+    system(['gz model -m ',modelName,' -d']);
+    setenv('LD_LIBRARY_PATH',old_ld_library_path);
+    pause(3);
 end
 if nargin < 11
     if useSDF
